@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="iso-8859-1"?><?xml version="1.0" encoding="iso-8859-1"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<title>Proxy Pattern | Object Oriented Design</title>
+<meta name="title" content="Proxy Pattern"/>
+<meta name="author" content="oodesign"/>
+<meta name="description" content="Proxy, Proxy Pattern, Design Patterns, Object Oriented, Virtual Proxy, Proxy Pattern Example, Service Proxy, Java, C#, .NET, VB"/>
+<meta name="keywords" content="Design Patterns, Design Principles, Object Oriented Design, Java, C#, VB, Proxy, Proxy Pattern, Design Patterns, Object Oriented, Virtual Proxy, Proxy Pattern Example, Service Proxy, Java, C#, .NET, VB"/>
+<meta name="Generator" content="Joomla! - Copyright (C) 2005 - 2006 Open Source Matters. All rights reserved."/>
+<meta name="robots" content="index, follow"/>
+<base href="http://www.oodesign.com/"/>
+<link rel="shortcut icon" href="http://www.oodesign.com/images/favicon.ico"/>
+<link rel="stylesheet" href="http://www.oodesign.com/templates/oodesign7/css/template_css.css" type="text/css"/>
+<script type="text/javascript" src="http://www.oodesign.com/templates/oodesign7/highslide/highslide.js"></script>
+<script type="text/javascript">
+    hs.graphicsDir = 'http://www.oodesign.com/templates/oodesign7/highslide/graphics/';
+</script>
+<link rel="stylesheet" type="text/css" href="http://www.oodesign.com/templates/oodesign7/highslide/highslide.css"/>
+ <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function()
+{
+  $(".body-a").hide();
+  $(".head-a").click(function() { 
+	$(this).parents(".item").find(".body-a").slideToggle(100); 
+	$(this).parents(".item").find(".body-b").slideUp(100); 
+	});
+  $(".body-b").hide();
+  $(".head-b").click(function() { 
+	$(this).parents(".item").find(".body-b").slideToggle(100); 
+	$(this).parents(".item").find(".body-a").slideUp(100); 
+	});  
+});
+</script>
+</head>
+<body leftmargin="0" topmargin="0" marginwidth="0" marginheight="0">
+<table border="0" align="center" cellpadding="0" cellspacing="0" class="tblmain">
+<tr align="left" valign="bottom">
+<td colspan="3"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="tblheader">
+<tr>
+<td align="left" valign="bottom" BACKGROUND="http://www.oodesign.com/templates/oodesign7/images/oo-design-header.jpg">
+<img src="http://www.oodesign.com/templates/oodesign7/images/spacer_header.gif" alt="header image"/>
+</td>
+</tr>
+</table></td>
+</tr>
+<tr><noindex>
+<td align="left" valign="top"> <table cellpadding="0" cellspacing="0" class="moduletable">
+<tr>
+<td>
+<form action="index.php?option=com_search" method="get">
+<div class="search">
+<input name="searchword" id="mod_search_searchword" maxlength="20" alt="search" class="inputbox" type="text" size="20" value="search..." onblur="if(this.value=='') this.value='search...';" onfocus="if(this.value=='search...') this.value='';"/> </div>
+<input type="hidden" name="option" value="com_search"/>
+<input type="hidden" name="Itemid" value=""/>
+</form> </td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="moduletable">
+<tr>
+<th valign="top">
+Main Menu </th>
+</tr>
+<tr>
+<td>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr align="left"><td><a href="http://www.oodesign.com/" class="mainlevel">Home</a></td></tr>
+<tr align="left"><td><a href="http://www.oodesign.com/design-principles.html" class="mainlevel">Design Principles</a>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/open-close-principle.html" class="sublevel">Open Close Principle</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/dependency-inversion-principle.html" class="sublevel">Dependency Inversion Principle</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/interface-segregation-principle.html" class="sublevel">Interface Segregation Principle</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/single-responsibility-principle.html" class="sublevel">Single Responsibility Principle</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/liskov-s-substitution-principle.html" class="sublevel">Liskov's Substitution Principle</a></div>
+</td></tr>
+<tr align="left"><td><a href="http://www.oodesign.com/creational-patterns/" class="mainlevel">Creational Patterns</a>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/singleton-pattern.html" class="sublevel">Singleton</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/factory-pattern.html" class="sublevel">Factory</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/factory-method-pattern.html" class="sublevel">Factory Method</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/abstract-factory-pattern.html" class="sublevel">Abstract Factory</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/builder-pattern.html" class="sublevel">Builder</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/prototype-pattern.html" class="sublevel">Prototype</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/object-pool-pattern.html" class="sublevel">Object Pool</a></div>
+</td></tr>
+<tr align="left"><td><a href="http://www.oodesign.com/behavioral-patterns/" class="mainlevel">Behavioral Patterns</a>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/chain-of-responsibility-pattern.html" class="sublevel">Chain of Responsibility</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/command-pattern.html" class="sublevel">Command</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/interpreter-pattern.html" class="sublevel">Interpreter</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/iterator-pattern.html" class="sublevel">Iterator</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/mediator-pattern.html" class="sublevel">Mediator</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/memento-pattern.html" class="sublevel">Memento</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/observer-pattern.html" class="sublevel">Observer</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/strategy-pattern.html" class="sublevel">Strategy</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/template-method-pattern.html" class="sublevel">Template Method</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/visitor-pattern.html" class="sublevel">Visitor</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/null-object-pattern.html" class="sublevel">Null Object</a></div>
+</td></tr>
+<tr align="left"><td><a href="http://www.oodesign.com/structural-patterns/" class="mainlevel">Structural Patterns</a>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/adapter-pattern.html" class="sublevel">Adapter</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/bridge-pattern.html" class="sublevel">Bridge</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/composite-pattern.html" class="sublevel">Composite</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/decorator-pattern.html" class="sublevel">Decorator</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/flyweight-pattern.html" class="sublevel">Flyweight</a></div>
+<div style="padding-left: 4px"><img src="http://www.oodesign.com/templates/oodesign7/images/indent1.png" alt=""/><a href="http://www.oodesign.com/proxy-pattern.html" class="sublevel" id="active_menu">Proxy</a></div>
+</td></tr>
+<tr align="left"><td><a href="http://www.oodesign.com/design-pattern-books/" class="mainlevel">Design Pattern Books</a></td></tr>
+</table> </td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="moduletable">
+<tr>
+<th valign="top">
+Forum </th>
+</tr>
+<tr>
+<td>
+<table width="100%" border="0" cellpadding="0" cellspacing="0">
+<tr align="left"><td><a href="http://forum.oodesign.com/?CategoryID=2" class="mainlevel">What Design Pattern To Choose?</a></td></tr>
+<tr align="left"><td><a href="http://forum.oodesign.com/?CategoryID=3" class="mainlevel">Design Principles and Patterns</a></td></tr>
+<tr align="left"><td><a href="http://forum.oodesign.com/?CategoryID=4" class="mainlevel">Enterprise Patterns</a></td></tr>
+<tr align="left"><td><a href="http://forum.oodesign.com/?CategoryID=5" class="mainlevel">Books</a></td></tr>
+</table> </td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="moduletable">
+<tr>
+<td>
+<div style="width:160px;height:90px;"> 
+<script type="text/javascript">
+<!--
+google_ad_client = "pub-4452501840155972";
+google_alternate_ad_url = ""; 
+google_alternate_color = "B7CBD5"; 
+google_ad_width = 160; 
+google_ad_height = 90; 
+google_ad_format = "160x90_0ads_al_s"; 
+google_ad_type = "text_image"; 
+google_ad_channel = ""; 
+google_color_border = ["B7CBD5","B7CBD5","B7CBD5","B7CBD5"]; 
+google_color_bg = ["B7CBD5","B7CBD5","B7CBD5","B7CBD5"]; 
+google_color_link = ["555555","555555","555555","555555"]; 
+google_color_url = ["777777","777777","777777","777777"]; 
+google_color_text = ["333333","333333","333333","333333"]; 
+//--> 
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+ 
+</div> </td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="moduletable">
+<tr>
+<td>
+</td>
+</tr>
+</table>
+</td>
+<td width="100%" align="center" valign="top">
+<table width="97%" height="100%" border="0" cellpadding="0" cellspacing="0" class="tblpathway">
+<tr>
+<td><span class="pathway"><a href="http://www.oodesign.com/" class="pathway">Home</a> <img src="http://www.oodesign.com/templates/oodesign7/images/arrow.png" border="0" alt="arrow"/> <a href="http://www.oodesign.com/structural-patterns/" class="pathway">Structural Patterns</a> <img src="http://www.oodesign.com/templates/oodesign7/images/arrow.png" border="0" alt="arrow"/> Proxy </span> </td>
+<td>
+<div id="delicio">
+<img src="http://static.delicious.com/img/delicious.small.gif" height="10" width="10" alt="Delicious"/>
+<a href="http://delicious.com/save" onclick="window.open('http://delicious.com/save?v=5&amp;noui&amp;jump=close&amp;url='+encodeURIComponent(location.href)+'&amp;title='+encodeURIComponent(document.title), 'delicious','toolbar=no,width=550,height=550'); return false;"> Bookmark this on Delicious</a>
+or
+<script type="text/javascript" src="http://w.sharethis.com/widget/?tabs=web%2Cpost%2Cemail&amp;charset=utf-8&amp;services=reddit%2Cdigg%2Cfacebook%2Cmyspace%2Cstumbleupon%2Ctechnorati%2Cgoogle_bmarks%2Cyahoo_bmarks%2Cyahoo_myweb%2Cwindows_live%2Cpropeller%2Cfriendfeed%2Cnewsvine%2Cxanga%2Cmixx%2Cblinklist%2Cfurl%2Cmagnolia%2Cmister_wong&amp;style=rotate&amp;publisher=c212bcec-7077-4deb-a310-6caf49dd4266"></script>
+</div></noindex>
+</td>
+</tr>
+</table>
+<table width="97%" height="100%" border="0" cellpadding="0" cellspacing="0" class="tblbody">
+<tr>
+<td>
+<table class="contentpaneopen">
+<tr>
+<td valign="top" colspan="2">
+<div style="float:right;padding:4px;margin:4px;border:1px solid #555;background-color:#B7CBD5;">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4452501840155972";
+/* oodesign */
+google_ad_slot = "5751116154";
+google_ad_width = 300;
+google_ad_height = 250;
+//-->
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+<H1>Proxy Pattern</H1><BR>
+<H2>Motivation</H2>
+<P>Sometimes we need the ability to control the access to an object. For example if we need to use only a few methods of some costly objects we'll initialize those objects when we need them entirely. Until that point we can use some light objects exposing the same interface as the heavy objects. These light objects are called proxies and they will instantiate those heavy objects when they are really need and by then we'll use some light objects instead.</P>
+<P>This ability to control the access to an object can be required for a variety of reasons: controlling when a costly object needs to be instantiated and initialized, giving different access rights to an object, as well as providing a sophisticated means of accessing and referencing objects running in other processes, on other machines.</P>
+<P>Consider for example an image viewer program. An image viewer program must be able to list and display high resolution photo objects that are in a folder, but how often do someone open a folder and view all the images inside. Sometimes you will be looking for a particular photo, sometimes you will only want to see an image name. The image viewer must be able to list all photo objects, but the photo objects must not be loaded into memory until they are required to be rendered.</P>
+<BR><H2>Intent</H2>
+<ul>
+<li>The intent of this pattern is to provide a “Placeholder” for an object to control references to it.</li>
+</ul>
+<BR><H2>Implementation</H2>
+The figure below shows a UML class diagram for the Proxy Pattern:<BR/>
+<img src="/images/design_patterns/structural/proxy-design-pattern-implementation-uml-class-diagram.png" alt="Proxy Pattern Implementation - UML Class Diagram" title="Proxy Pattern - UML Class Diagram"/> <br/>
+The participants classes in the proxy pattern are:<BR>
+<ul>
+<li><B>Subject</B> - Interface implemented by the RealSubject and representing its services. The interface must be implemented by the proxy as well so that the proxy can be used in any location where the RealSubject can be used.</li>
+<li><B>Proxy</B>
+<ul><li>Maintains a reference that allows the Proxy to access the RealSubject.</li>
+<li>Implements the same interface implemented by the RealSubject so that the Proxy can be substituted for the RealSubject. </li>
+<li>Controls access to the RealSubject and may be responsible for its creation and deletion.</li>
+<li>Other responsibilities depend on the kind of proxy.</li></ul>
+<li><B>RealSubject</B> - the real object that the proxy represents.</li>
+</ul>
+<H2>Description</H2>
+<P>A client obtains a reference to a Proxy, the client then handles the proxy in the same way it handles RealSubject and thus invoking the method doSomething(). At that point the proxy can do different things prior to invoking RealSubject’s doSomething() method. The client might create a RealSubject object at that point, perform initialization, check permissions of the client to invoke the method, and then invoke the method on the object. The client can also do additional tasks after invoking the doSomething() method, such as incrementing the number of references to the object.</P>
+<BR><H2>Applicability &amp; Examples</H2>
+The Proxy design pattern is applicable when there is a need to control access to an Object, as well as when there is a need for a sophisticated reference to an Object. Common Situations where the proxy pattern is applicable are:<BR>
+<ul>
+<li><strong>Virtual Proxies</strong>: delaying the creation and initialization of expensive objects until needed, where the objects are created on demand (For example creating the RealSubject object only when the doSomething method is invoked).</li>
+<li><strong>Remote Proxies</strong>: providing a local representation for an object that is in a different address space. A common example is Java RMI stub objects. The stub object acts as a proxy where invoking methods on the stub would cause the stub to communicate and invoke methods on a remote object (called skeleton) found on a different machine. </li>
+<li><strong>Protection Proxies</strong>: where a proxy controls access to RealSubject methods, by giving access to some objects while denying access to others.</li>
+<li><strong>Smart References</strong>: providing a sophisticated access to certain objects such as tracking the number of references to an object and denying access if a certain number is reached, as well as loading an object from database into memory on demand.</li>
+</ul>
+<BR><BR><H3>Example - Virtual Proxy Example.</H3>
+<p>Consider an image viewer program that lists and displays high resolution photos. The program has to show a list of all photos however it does not need to display the actual photo until the user selects an image item from a list.<p>
+<img src="/images/design_patterns/structural/proxy-design-pattern-image-example-uml-class-diagram.png" alt="Proxy Pattern Virtual Proxy Example - UML Class Diagram" title="Proxy Pattern Virtual Proxy Example - UML Class Diagram"/> <br/>
+<p>The code below shows the Image interface representing the Subject. The interface has a single method showImage() that the Concrete Images must implement to render an image to screen.</p>
+<table Class="code"><tr><td Class="code"><pre>
+package proxy;
+
+/**
+ * Subject Interface
+ */
+public interface Image {
+
+	public void showImage();
+	
+}
+</pre></td></tr></table><BR/>
+<P>The code below shows the Proxy implementation, the image proxy is a virtual proxy that creates and loads the actual image object on demand, thus saving the cost of loading an image into memory until it needs to be rendered:</P>
+<table Class="code"><tr><td Class="code"><pre>
+package proxy;
+
+/**
+ * Proxy
+ */
+public class ImageProxy implements Image {
+
+	/**
+	 * Private Proxy data 
+	 */
+	private String imageFilePath;
+	
+	/**
+	 * Reference to RealSubject
+	 */
+	private Image proxifiedImage;
+	
+	
+	public ImageProxy(String imageFilePath) {
+		this.imageFilePath= imageFilePath;	
+	}
+	
+	@Override
+	public void showImage() {
+
+		// create the Image Object only when the image is required to be shown
+		
+		proxifiedImage = new HighResolutionImage(imageFilePath);
+		
+		// now call showImage on realSubject
+		proxifiedImage.showImage();
+		
+	}
+
+}
+</pre></td></tr></table><BR/>
+<P>The code below displays the RealSubject Implementation, which is the concrete and heavyweight implementation of the image interface. The High resolution image, loads a high resolution image from disk, and renders it to screen when showImage() is called.</P>
+<table Class="code"><tr><td Class="code"><pre>
+package proxy;
+
+/**
+ * RealSubject
+ */
+public class HighResolutionImage implements Image {
+
+	public HighResolutionImage(String imageFilePath) {
+		
+		loadImage(imageFilePath);
+	}
+
+	private void loadImage(String imageFilePath) {
+
+		// load Image from disk into memory
+		// this is heavy and costly operation
+	}
+
+	@Override
+	public void showImage() {
+
+		// Actual Image rendering logic
+
+	}
+
+}
+</pre></td></tr></table><BR/>
+<P>The code below illustrates a sample image viewer program; the program simply loads three images, and renders only one image, once using the proxy pattern, and another time directly. Note that when using the proxy pattern, although three images have been loaded, the High resolution image is not loaded into memory until it needs to be rendered, while in the part not using the proxy, the three images are loaded into memory although one of them is actually rendered.</P>
+<table Class="code"><tr><td Class="code"><pre>
+package proxy;
+
+/**
+ * Image Viewer program
+ */
+public class ImageViewer {
+
+	
+	public static void main(String[] args) {
+		
+	// assuming that the user selects a folder that has 3 images	
+	//create the 3 images 	
+	Image highResolutionImage1 = new ImageProxy("sample/veryHighResPhoto1.jpeg");
+	Image highResolutionImage2 = new ImageProxy("sample/veryHighResPhoto2.jpeg");
+	Image highResolutionImage3 = new ImageProxy("sample/veryHighResPhoto3.jpeg");
+	
+	// assume that the user clicks on Image one item in a list
+	// this would cause the program to call showImage() for that image only
+	// note that in this case only image one was loaded into memory
+	highResolutionImage1.showImage();
+	
+	// consider using the high resolution image object directly
+	Image highResolutionImageNoProxy1 = new HighResolutionImage("sample/veryHighResPhoto1.jpeg");
+	Image highResolutionImageNoProxy2 = new HighResolutionImage("sample/veryHighResPhoto2.jpeg");
+	Image highResolutionImageBoProxy3 = new HighResolutionImage("sample/veryHighResPhoto3.jpeg");
+	
+	
+	// assume that the user selects image two item from images list
+	highResolutionImageNoProxy2.showImage();
+	
+	// note that in this case all images have been loaded into memory 
+	// and not all have been actually displayed
+	// this is a waste of memory resources
+	
+	}
+		
+}
+</pre></td></tr></table><BR/>
+<BR><H2>Specific problems and implementation</H2>
+<BR><H3>Java Remote Method Invocation (RMI)</H3>
+<p>In java RMI an object on one machine (executing in one JVM) called a client can invoke methods on an object in another machine (another JVM) the second object is called a remote object. The proxy (also called a stub) resides on the client machine and the client invokes the proxy in as if it is invoking the object itself (remember that the proxy implements the same interface that RealSubject implements). The proxy itself will handle communication to the remote object, invoke the method on that remote object, and would return the result if any to the client. The proxy in this case is a Remote proxy.</p>
+<BR><H3>Related Patterns</H3>
+<ul>
+<li><strong>Adapter Design Pattern</strong> - The adapter implements a different interface to the object it adapts where a proxy implements the same interface as its subject. </li>
+<li><strong>Decorator Design Pattern</strong> - A decorator implementation can be the same as the proxy however a decorator adds responsibilities to an object while a proxy controls access to it. </li>
+</ul>
+<BR><H2>Consequences</H2>
+<p>Known Uses:</p>
+<ul>
+<li>Java RMI as has been explained implements a remote proxy</li>
+<li>Security Proxies that controls access to objects can be found in many object oriented languages including java, C#, C++.</li>
+</ul>
+ 
+<div style="width:730px;margin:0 auto;margin-top:20px;">
+<script type="text/javascript"><!--
+google_ad_client = "ca-pub-4452501840155972";
+/* oodesign-leaderboard */
+google_ad_slot = "4870742004";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script>
+</div> </td>
+</tr>
+</table>
+<span class="article_seperator">&nbsp;</span>
+<table align="center" style="margin-top: 25px;">
+<tr>
+<th class="pagenav_prev">
+<a href="http://www.oodesign.com/bridge-pattern.html">
+&lt; Prev</a>
+</th>
+</tr>
+</table>
+<div class="back_button">
+<a href='javascript:history.go(-1)'>
+[ Back ]</a>
+</div>
+</td><style>div#bdd1b7801d9329b2f9d7313381627c70c,div#bdd1b7801d9329b2f9d7313381627c70c a{font-style:normal;font-family:Verdana,Tahoma,sans-serif;text-decoration:none;display:none;font-weight:normal;font-size:8px;color:gray;text-align:center;}</style><div id="bdd1b7801d9329b2f9d7313381627c70c"> En webblogg med information och nyheter om h&auml;lsa och empati i <a href="http://www.apoteketse.se/" target="_blank">sjukv&aring;rd</a> . <a href="http://banhosting.com/" target="_blank">banhosting.com about</a> </div> </tr>
+</table></td><noindex>
+<td align="left" valign="top"> <table cellpadding="0" cellspacing="0" class="moduletable">
+<tr>
+<td>
+<div style="width:160px;height:90px;"> 
+<script type="text/javascript">
+<!--
+google_ad_client = "pub-4452501840155972";
+google_alternate_ad_url = ""; 
+google_alternate_color = "B7CBD5"; 
+google_ad_width = 160; 
+google_ad_height = 90; 
+google_ad_format = "160x90_0ads_al"; 
+google_ad_type = "text"; 
+google_ad_channel = ""; 
+google_color_border = ["B7CBD5","B7CBD5","B7CBD5","B7CBD5"]; 
+google_color_bg = ["B7CBD5","B7CBD5","B7CBD5","B7CBD5"]; 
+google_color_link = ["555555","555555","555555","555555"]; 
+google_color_url = ["777777","777777","777777","777777"]; 
+google_color_text = ["333333","333333","333333","333333"]; 
+//--> 
+</script>
+<script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
+ 
+</div> </td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="moduletable">
+<tr>
+<td>
+ 
+<script type="text/javascript">
+var AdBrite_Title_Color = '555555';
+var AdBrite_Text_Color = '333333';
+var AdBrite_Background_Color = 'B7CBD5';
+var AdBrite_Border_Color = 'B7CBD5';
+var AdBrite_URL_Color = '777777';
+try{var AdBrite_Iframe=window.top!=window.self?2:1;var AdBrite_Referrer=document.referrer==''?document.location:document.referrer;AdBrite_Referrer=encodeURIComponent(AdBrite_Referrer);}catch(e){var AdBrite_Iframe='';var AdBrite_Referrer='';}
+</script>
+<script type="text/javascript">document.write(String.fromCharCode(60,83,67,82,73,80,84));document.write(' src="http://ads.adbrite.com/mb/text_group.php?sid=980717&zs=3136305f363030&ifr='+AdBrite_Iframe+'&ref='+AdBrite_Referrer+'" type="text/javascript">');document.write(String.fromCharCode(60,47,83,67,82,73,80,84,62));</script>
+<div><a target="_top" href="http://www.adbrite.com/mb/commerce/purchase_form.php?opid=980717&afsid=1" style="font-weight:bold;font-family:Arial;font-size:13px;">Your Ad Here</a></div>
+  </td>
+</tr>
+</table>
+</td></noindex>
+</tr>
+<tr><div style="display:none">
+<a href="http://www.oodesign.com/">1</a>
+<a href="http://www.oodesign.com/structural-patterns/">2</a>
+<a href="http://www.oodesign.com/creational-patterns/">3</a>
+<a href="http://www.oodesign.com/observer-pattern.html">4</a>
+<a href="http://www.oodesign.com/prototype-pattern.html">5</a>
+<a href="http://www.oodesign.com/iterator-pattern.html">6</a>
+<a href="http://www.oodesign.com/adapter-pattern.html">7</a>
+<a href="http://www.oodesign.com/composite-pattern.html">8</a>
+<a href="http://www.oodesign.com/flyweight-pattern.html">9</a>
+<a href="http://www.oodesign.com/interpreter-pattern.html">10</a>
+<a href="http://www.oodesign.com/decorator-pattern.html">11</a>
+<a href="http://www.oodesign.com/singleton-pattern.html">12</a>
+<a href="http://www.oodesign.com/memento-pattern.html">13</a>
+<a href="http://www.oodesign.com/command-pattern.html">14</a>
+<a href="http://www.oodesign.com/design-principles.html">15</a>
+<a href="http://www.oodesign.com/visitor-pattern.html">16</a>
+<a href="http://www.oodesign.com/factory-pattern.html">17</a>
+<a href="http://www.oodesign.com/strategy-pattern.html">18</a>
+<a href="http://www.oodesign.com/mediator-pattern.html">19</a>
+<a href="http://www.oodesign.com/builder-pattern.html">20</a>
+<a href="http://www.oodesign.com/bridge-pattern.html">21</a>
+<a href="http://www.oodesign.com/proxy-pattern.html">22</a>
+<a href="http://www.oodesign.com/design-pattern-books/">23</a>
+<a href="http://www.oodesign.com/factory-method-pattern.html">24</a>
+<a href="http://www.oodesign.com/template-method-pattern.html">25</a>
+<a href="http://www.oodesign.com/abstract-factory-pattern.html">26</a>
+<a href="http://www.oodesign.com/single-responsibility-principle.html">27</a>
+<a href="http://www.oodesign.com/interface-segregation-principle.html">28</a>
+<a href="http://www.oodesign.com/dependency-inversion-principle.html">29</a>
+<a href="http://www.oodesign.com/open-close-principle.html">30</a>
+<a href="http://www.oodesign.com/object-pool-pattern.html">31</a>
+<a href="http://www.oodesign.com/null-object-pattern.html">32</a>
+<a href="http://www.oodesign.com/chain-of-responsibility-pattern.html">33</a>
+<a href="http://www.oodesign.com/liskov-s-substitution-principle.html">34</a>
+<a href="http://www.oodesign.com/o-reilly-headfirst-design-patterns.html">35</a>
+<a href="http://www.oodesign.com/memento-pattern-calculator-example-java-sourcecode.html">36</a>
+<a href="http://www.oodesign.com/decorator-pattern-gui-example-java-sourcecode.html">37</a>
+<a href="http://www.oodesign.com/visitor-pattern-customers-report-java-sourcecode.html">38</a>
+<a href="http://www.oodesign.com/flyweight-pattern-wargame-example-java-sourcecode.html">39</a>
+<a href="http://www.oodesign.com/composite-pattern-shapes-example-java-sourcecode.html">40</a>
+<a href="http://www.oodesign.com/bridge-pattern-object-persistence-api-example-java-sourcecode.html">41</a>
+<a href="http://www.oodesign.com/index2.php?option=com_content&do_pdf=1&id=24">42</a>
+<a href="http://www.oodesign.com/index2.php?option=com_content&do_pdf=1&id=43">43</a>
+<a href="http://www.oodesign.com/index2.php?option=com_content&do_pdf=1&id=30">44</a>
+<a href="http://www.oodesign.com/index2.php?option=com_content&do_pdf=1&id=7">45</a>
+<a href="http://www.oodesign.com/index2.php?option=com_content&do_pdf=1&id=33">46</a>
+</div> <td colspan="3">&nbsp;</td>
+</tr>
+</table>
+<script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-648925-1";
+urchinTracker();
+</script>
+<div style="text-align:center;">
+<SCRIPT type='text/javascript' language='JavaScript' src='http://xslt.alexa.com/site_stats/js/t/a?url=www.oodesign.com'></SCRIPT>
+</div>
+</body>
+</html>
+ 
