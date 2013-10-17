@@ -19,11 +19,13 @@ class Gui
   end
 
   def on_button1_clicked
-    download(@links[0], "proxy.html")
+    download(@links[0])
   end
 
   def on_button2_clicked
-    download(@links[1])
+    Thread.new do
+      download(@links[1])
+    end
   end
 
   def on_button3_clicked
@@ -42,9 +44,9 @@ class Gui
     exit()
   end
 
-  def download(link, name)
+  def download(link)
     file = open(link)
-    IO.copy_stream(file, "./tmp/#{name}")
+    IO.copy_stream(file, "./tmp/#{link.match(/^http\S+\/(\w+\.\w+)$/)[1]}")
   end
 end
 
