@@ -8,13 +8,15 @@ class Gui
     @links = [  'http://www.oodesign.com/proxy-pattern.html',
                 'http://d24w6bsrhbeh9d.cloudfront.net/photo/azb9xjp_700b_v1.jpg',
                 'http://cartea-libera.info/dansurile/dansurile.pdf',
-                'http://debian-handbook.info/download/stable/debian-handbook.pdf'
+                'http://debian-handbook.info/download/stable/debian-handbook.pdf',
+                'http://foundation.zurb.com/docs/components/forms.html'
     ]
     @builder = Gtk::Builder.new
     filename = File.join(File.dirname(__FILE__), "proxy.glade")
     @builder << filename
     @builder.connect_signals {|name| method(name)}
     @window = @builder["MainWindow"]
+    @spinner = @builder['spinner1']
     @window.show_all
   end
 
@@ -37,7 +39,7 @@ class Gui
   end
 
   def on_button5_clicked
-    puts "a button was hitted"
+    download(@links[4])
   end
 
   def on_quit
@@ -45,8 +47,10 @@ class Gui
   end
 
   def download(link)
+    @spinner.start
     file = open(link)
-    IO.copy_stream(file, "./tmp/#{link.match(/^http\S+\/(\w+\.\w+)$/)[1]}")
+    IO.copy_stream(file, "./tmp/#{link.match(/([^\/]+)$/)}")
+    @spinner.stop
   end
 end
 
