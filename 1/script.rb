@@ -18,6 +18,7 @@ class Gui
     @window = @builder["MainWindow"]
     @spinner = @builder['spinner1']
     @window.show_all
+    @proxy = DownloaderProxy.new
   end
 
   def on_button1_clicked
@@ -25,9 +26,7 @@ class Gui
   end
 
   def on_button2_clicked
-    Thread.new do
-      download(@links[1])
-    end
+    download(@links[1])
   end
 
   def on_button3_clicked
@@ -48,9 +47,30 @@ class Gui
 
   def download(link)
     @spinner.start
+    @proxy.get(link)
+    @spinner.stop
+  end
+end
+
+class DownloaderProxy
+  def initialize
+    @links = []
+    @downloader = Downloader.new
+  end
+
+  def get(link)
+    @links << link
+    if @links.count == 5
+      puts @links.count
+      @links.each { |link| @downloader.get(link) }
+    end
+  end
+end
+
+class Downloader
+  def get(link)
     file = open(link)
     IO.copy_stream(file, "./tmp/#{link.match(/([^\/]+)$/)}")
-    @spinner.stop
   end
 end
 
