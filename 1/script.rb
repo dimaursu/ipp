@@ -54,16 +54,12 @@ end
 
 class DownloaderProxy
   def initialize
-    @links = []
     @downloader = Downloader.new
   end
 
   def get(link)
-    @links << link
-    if @links.count == 5
-      puts @links.count
-      @links.each { |link| @downloader.get(link) }
-    end
+    files = Dir.entries("./tmp").map { |file| file == link.match(/([^\/]+)$/)[1] }
+    @downloader.get(link) unless files.include?(true)
   end
 end
 
