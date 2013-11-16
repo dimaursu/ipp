@@ -2,63 +2,38 @@
 
 require 'gtk3'
 require 'debugger'
-
-class Mediator
-  attr_accessor :label
-  attr_accessor :buttons
-
-  def initialize
-    @builder = Gtk::Builder.new
-    filename = File.join(File.dirname(__FILE__), "gui.glade")
-    @builder << filename
-    @builder.connect_signals {|name| method(name)}
-    @window = @builder["MainWindow"]
-    @label = @builder["label1"]
-    @buttons = []
-    @buttons.push(@builder["hit"], @builder["hith"])
-    @window.show_all
-    @player1 = Player.new("Ion")
-    @player2 = Player.new("Dima")
-    @scoreboard = Scoreboard.new
-  end
-
-  def on_p1button_clicked
-    @player1.hits += 1
-  end
-
-  def on_p2button_clicked
-    @player2.hits += 1
-  end
-
-  def run
-    while true do
-      if (@player1.hits >= @player2.health) || (@player2.hits >= @player1.health)
-        @scoreboard.score = "#{@player1.hits}:#{@player2.hits} Game over"
-        @scoreboard.show_score(@label)
-        sleep(2)
-        @window.destroy
-      else
-        @scoreboard.score = "#{@player1.hits}:#{@player2.hits}"
-        @scoreboard.show_score(@label)
-      end
-    end
-  end
-end
+require 'observer'
+require 'singleton'
 
 class Player
-  attr_accessor :name
-  attr_accessor :health
-  attr_accessor :hits
+  attr_accessor :name, :health, :hits
+  include Observable
+  $players ||= []
 
   def initialize (name)
+    notifier = Notifier.instance
+    add_observer(notifier)
+    # spawn a Gtk window
+    window = Gtk::Window.new("#{name}'s window")
+    button = Gtk::Button.new(label: "Hit someone")
+    button.signal_connect("clicked") do
+      changed
+      @hits = @hits + 1
+      notify_observers($players)
+    end
+    window.add(button)
+    window.show_all
+
     @name = name
     @health = 10
     @hits = 0
+    $players << self
   end
 end
 
 class Scoreboard
   attr_accessor :score
+  include Singleton
 
   def initialize
     @score = "0:0"
@@ -69,6 +44,36 @@ class Scoreboard
   end
 end
 
-m = Mediator.new
-Thread.new { Gtk.main }
-m.run
+class Gui
+  attr_accessor :label, :buttons
+  include Singleton
+
+  def initialize
+    @builder = Gtk::Builder.new
+    filename = File.join(File.dirname(__FILE__), "gui.glade")
+    @builder << filename
+    @builder.connect_signals {|name| method(name)}
+    @window = @builder["MainWindow"]
+    @label = @builder["label1"]
+    @window.show_all
+  end
+
+  def on_add_player_clicked
+    Player.new((0...8).map { (65 + rand(26)).chr }.join.capitalize)
+  end
+end
+
+class Notifier
+  include Singleton
+
+  def initialize
+    @players = []
+  end
+
+  def update(player)
+    puts @players.count
+  end
+end
+
+Gui.instance
+Gtk.main
