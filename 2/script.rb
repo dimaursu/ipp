@@ -8,18 +8,15 @@ require 'singleton'
 class Player
   attr_accessor :name, :health, :hits
   include Observable
-  $players ||= []
 
   def initialize (name)
-    notifier = Notifier.instance
-    add_observer(notifier)
     # spawn a Gtk window
     window = Gtk::Window.new("#{name}'s window")
     button = Gtk::Button.new(label: "Hit someone")
     button.signal_connect("clicked") do
-      changed
       @hits = @hits + 1
-      notify_observers($players)
+      changed
+      notify_observers(@name, @hits)
     end
     window.add(button)
     window.show_all
@@ -27,20 +24,21 @@ class Player
     @name = name
     @health = 10
     @hits = 0
-    $players << self
   end
 end
 
 class Scoreboard
   attr_accessor :score
   include Singleton
+  include Observable
 
-  def initialize
-    @score = "0:0"
+  def show_score
+    Gui.instance.label.label = @score
   end
 
-  def show_score(label)
-    label.label = @score
+  def scorboardChange(scores)
+    @score = scores.collect { |player, score| player.to_s + ":" + score.to_s } * "\n"
+    show_score
   end
 end
 
@@ -56,22 +54,24 @@ class Gui
     @window = @builder["MainWindow"]
     @label = @builder["label1"]
     @window.show_all
+    @game = Observer.new
   end
 
   def on_add_player_clicked
-    Player.new((0...8).map { (65 + rand(26)).chr }.join.capitalize)
+    player = Player.new((0...8).map { (65 + rand(26)).chr }.join.capitalize)
+    player.add_observer(@game)
   end
 end
 
-class Notifier
-  include Singleton
-
+class Observer
   def initialize
-    @players = []
+    @scoreboard = Scoreboard.instance
+    @scores = {}
   end
 
-  def update(player)
-    puts @players.count
+  def update(name, hits)
+    @scores[name] = hits
+    @scoreboard.scorboardChange(@scores)
   end
 end
 
