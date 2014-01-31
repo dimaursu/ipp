@@ -1,35 +1,41 @@
+require_relative './my_classes.rb'
+require 'yaml'
+
+def build_items
+  ingredients = YAML::load(File.open("ingredients.yml"))
+
+  check_btns = []
+  ingredients.each do |key, value|
+    check_btns << MyLabel.new(key, value["max"])
+    value["list"].each do |ingredient|
+      check_btns << MyCheckButton.new(ingredient, key)
+    end
+  end
+  check_btns
+end
+
 class PizzaAdriano < Gtk::Window
   def initialize(*args)
     super *args
-    set_title  "Check Buttons"
+    set_title  "Pizza Adriano"
     border_width = 10
     signal_connect('delete_event') { Gtk.main_quit }
 
     vbox = Gtk::VBox.new(false, 5)
-    #gather data
-    ingredients = YAML::load(File.open("ingredients.yml"))
     base_price = 40
-    ####### callbacks
-        ### generation of underlaying buttons
-    checks = []
-    ingredients.each do |key, value|
-      checks << MyLabel.new(key, value["max"])
-      value["list"].each do |ingredient|
-        checks << MyCheckButton.new(ingredient, key)
-      end
-    end
-
+    ### generation of underlaying buttons
+    check_btns = build_items
     close  = Gtk::Button.new(Gtk::Stock::CLOSE)
     cost = Gtk::Label.new(base_price.to_s)
     valuta = Gtk::Label.new(" MDL")
 
-    checks.each do |widget|
-      widget.signal_connect('toggled') { |w| compute_cost(cost, w, checks) } if widget.is_a? MyCheckButton
+    check_btns.each do |widget|
+      widget.signal_connect('toggled') { |w| compute_cost(cost, w, check_btns) } if widget.is_a? MyCheckButton
     end
     close.signal_connect('clicked') { Gtk.main_quit }
 
     ### group buttons
-    checks.each do |check|
+    check_btns.each do |check|
       vbox.pack_start(check, false, true, 0)
     end
 
@@ -79,3 +85,4 @@ class PizzaAdriano < Gtk::Window
     widgets.each { |w| w.sensitive = true }
   end
 end
+
