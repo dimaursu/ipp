@@ -25,21 +25,25 @@ class PizzaAdriano < Gtk::Window
     base_price = 40
     ### generation of underlaying buttons
     check_btns = build_items
-    close  = Gtk::Button.new(Gtk::Stock::CLOSE)
+    close  = Gtk::Button.new("Order")
     cost = Gtk::Label.new(base_price.to_s)
     valuta = Gtk::Label.new(" MDL")
+    name_label = Gtk::Label.new("Enter Name:")
+    name = Gtk::Entry.new
+    hbox = Gtk::HBox.new
 
     check_btns.each do |widget|
       widget.signal_connect('toggled') { |w| compute_cost(cost, w, check_btns) } if widget.is_a? MyCheckButton
     end
-    close.signal_connect('clicked') { Gtk.main_quit }
+    close.signal_connect('clicked') {|b| b.label = (100..999).to_a.sample.to_s}
 
     ### group buttons
     check_btns.each do |check|
       vbox.pack_start(check, false, true, 0)
     end
 
-    hbox = Gtk::HBox.new()
+    hbox.pack_start(name_label, false)
+    hbox.pack_start(name, false)
     hbox.pack_start(cost, false)
     hbox.pack_start(valuta, false)
     vbox.pack_start(hbox, false, true, 0)
