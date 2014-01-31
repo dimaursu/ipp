@@ -1,0 +1,31 @@
+Cheeses:
+    max: 3
+    list:
+        Feta: 5
+        Parmesan: 7
+        Mozarella: 3
+        Dor Blue: 20
+        Edam: 11
+        Brânză: 6
+Meat:
+    max: 2
+    list:
+        Bacon: 11
+        Prosciutto: 17
+        Salami: 14
+        Chicken Breast: 18
+        Ham: 20
+Vegetables:
+    max: 5
+    list:
+        Fresh mushrooms: 4
+        Smoked mushrooms: 5
+        Red onion: 2
+        Tomatoes: 4
+        Garlic: 3
+        Rucola: 5
+        Marinated Gogoshars: 7
+        Corn: 5
+        Parsley: 3
+        Chili pepper: 1
+
